@@ -1,1 +1,29 @@
+name: Xcode CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest  # Use the latest macOS runner
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Xcode
+      uses: apple-actions/setup-xcode@v3
+      with:
+        xcode-version: '15.0'  # Specify the Xcode version
+
+    - name: Install CocoaPods
+      run: pod install  # Install CocoaPods dependencies if needed
+
+    - name: Build and test
+      run: xcodebuild -workspace YourWorkspace.xcworkspace -scheme YourScheme -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.4' clean build test | xcpretty
 
